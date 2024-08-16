@@ -12,13 +12,13 @@ def test():
     return {"Channel":"TEST SUCCESS", "tutorial":"IDK ANYMORE"}
 
 @app.route("/parse", methods=["GET"])
-def parse():
+async def parse():
     prompt = request.args.get('prompt')
-    print("changes")
+    print("idk")
     if not prompt:
         return jsonify({"error": "No prompt provided"}), 400
-    parser.parse(prompt)
-    return {"Channel":"Parse", "tutorial":"IDK ANYMORE"}
+    candidates = await parser.parse(prompt)
+    return {"candidates":candidates}
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

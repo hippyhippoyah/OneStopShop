@@ -6,3 +6,4 @@ python-dotenv
 youtube-transcript-api
 chromadb
 langchain-chroma
+duckduckgo-search
