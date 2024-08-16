@@ -1,0 +1,8 @@
+FLASK
+beautifulsoup4
+langchain_community
+langchain_openai
+python-dotenv
+youtube-transcript-api
+chromadb
+langchain-chroma
