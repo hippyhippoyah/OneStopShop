@@ -1,10 +1,12 @@
 # OneStopShop: WIP
 
-OneStopShop is a comprehensive platform that simplifies product research by gathering information from multiple sources. With OneStopShop, you can:
+OneStopShop is a comprehensive platform that simplifies product research by gathering information from multiple sources. With OneStopShop, the website automatically:
 
 - **Access YouTube Reviews**: See video reviews for your products.
 - **Read Online Reviews**: Aggregate reviews from various online sources.
 - **Ask AI**: Get insights and answers from our AI-powered assistant.
+
+And Based on this information, it gives you the top 5 Products!
 
 ## Architecture
 
