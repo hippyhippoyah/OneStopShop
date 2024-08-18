@@ -17,8 +17,7 @@ async def parse():
     print("idk")
     if not prompt:
         return jsonify({"error": "No prompt provided"}), 400
-    candidates = await parser.parse(prompt)
-    return {"candidates":candidates}
+    return await parser.parse(prompt)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0')

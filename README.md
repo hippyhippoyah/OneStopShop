@@ -1,4 +1,4 @@
-# OneStopShop: WIP
+# OneStopShop: WIP... I don't write much next.js
 
 OneStopShop is a comprehensive platform that simplifies product research by gathering information from multiple sources. With OneStopShop, the website automatically:
 

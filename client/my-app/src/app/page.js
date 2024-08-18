@@ -6,10 +6,10 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [initialState, setState] = useState([]);
   const [parseResponse, setParseResponse] = useState(null);
-  const [prompt, setPrompt] = useState('badminton racket');
+  const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const url = "/test";
-  
+
   useEffect(() => {
     fetch(url).then(response => {
       if (response.status === 200) {
@@ -52,18 +52,34 @@ export default function Home() {
             onClick={handleParseClick} 
             className={`${styles.parseButton} ${loading ? styles.hiddenButton : ''}`}
             disabled={loading}
-          >Parse</button>
+          >Research!</button>
         </div>
         {loading && (
-          <div>Loading...
+          <div>Researching...
             <div className={styles.loader}></div>
           </div>
-          )}
+        )}
         
         {parseResponse && (
           <div className={styles.responseContainer}>
-            <h2 className={styles.responseTitle}>Parse Response</h2>
-            <pre className={styles.responseText}>{JSON.stringify(parseResponse, null, 2)}</pre>
+            <h2 className={styles.responseTitle}>Products</h2>
+            <div className={styles.productList}>
+              {parseResponse.products.map((product, index) => (
+                <div key={index} className={styles.productCard}>
+                  <h3 className={styles.productName}>{product['product-name']}</h3>
+                  <p className={styles.productRating}>Rating: {product['product-rating']}</p>
+                  <p className={styles.productHighlights}>{product.highlights}</p>
+                  <p className={styles.productReview}>{product['product-review']}</p>
+                  <div className={styles.reviewLinks}>
+                    {product.reviewers.map((reviewer, i) => (
+                      <a key={i} href={reviewer} target="_blank" rel="noopener noreferrer" className={styles.reviewLink}>
+                        Review {i + 1}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

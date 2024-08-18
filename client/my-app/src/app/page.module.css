@@ -1,80 +1,68 @@
-.main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #1c1c2d, #4b006e);
-  color: #ffffff;
-  font-family: 'Helvetica Neue', sans-serif;
-}
+/* page.module.css */
 
-.description {
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-  text-align: center;
+.main {
+  background-color: #EEE2DC;
+  padding: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #123C69;
+  min-height: 100vh;
 }
 
 .title {
-  font-size: 3em;
-  margin-bottom: 20px;
-  background: -webkit-linear-gradient(45deg, #8a2be2, #4b0082);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 3rem;
+  color: #AC3B61;
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .inputContainer {
-  margin-top: 20px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 15px;
+  margin-bottom: 30px;
 }
 
 .promptInput {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  font-size: 1.1em;
+  padding: 12px 20px;
+  border: 2px solid #BAB2B5;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #123C69;
+  background-color: #FFF;
+  margin-right: 10px;
   width: 300px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.promptInput::placeholder {
+  color: #BAB2B5;
 }
 
 .parseButton {
-  padding: 10px 20px;
-  border-radius: 8px;
+  padding: 12px 24px;
+  background-color: #AC3B61;
+  color: #FFF;
   border: none;
-  background-color: #8a2be2;
-  color: #ffffff;
-  font-size: 1.1em;
+  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
-  position: relative;
+  transition: background-color 0.3s ease;
 }
 
 .parseButton:hover {
-  background-color: #6a1bbf;
+  background-color: #EDC7B7;
 }
 
 .hiddenButton {
-  opacity: 0;
-  pointer-events: none;
+  display: none;
 }
 
 .loader {
-  border: 4px solid rgba(0, 0, 0, 0.1);
+  border: 4px solid #EEE2DC;
+  border-top: 4px solid #AC3B61;
   border-radius: 50%;
-  border-top: 4px solid #ffffff;
   width: 24px;
   height: 24px;
   animation: spin 1s linear infinite;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 @keyframes spin {
@@ -83,22 +71,70 @@
 }
 
 .responseContainer {
-  margin-top: 30px;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  text-align: left;
-  max-width: 600px;
-  overflow-x: auto;
+  margin-top: 40px;
 }
 
 .responseTitle {
-  font-size: 1.5em;
+  font-size: 2rem;
+  color: #123C69;
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.productList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.productCard {
+  background-color: #FFF;
+  border: 1px solid #BAB2B5;
+  border-radius: 10px;
+  padding: 20px;
+  width: 280px;
+  transition: transform 0.3s ease;
+}
+
+.productCard:hover {
+  transform: translateY(-10px);
+}
+
+.productName {
+  font-size: 1.5rem;
+  color: #123C69;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.productRating {
+  font-size: 1.2rem;
+  color: #AC3B61;
   margin-bottom: 10px;
 }
 
-.responseText {
-  white-space: pre-wrap;
-  word-wrap: break-word;
+.productHighlights,
+.productReview {
+  font-size: 1rem;
+  color: #123C69;
+  margin-bottom: 15px;
+}
+
+.reviewLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reviewLink {
+  color: #AC3B61;
+  text-decoration: underline;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.reviewLink:hover {
+  color: #EDC7B7;
 }

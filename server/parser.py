@@ -66,6 +66,8 @@ async def fetch_google_search_results(google_query, count=3, type="search"):
                 response_dict = await response.json()
                 if type == "videos":
                     organic_results = response_dict.get('videos', [])
+                # if type == "images":
+                #     organic_results = response_dict.get('images', [])
                 else:
                     organic_results = response_dict.get('organic', [])
                 urls = [res['link'] for res in organic_results]
@@ -124,7 +126,8 @@ async def process_urls(youtube_urls, product):
 
 async def fetch_website_reviews(product, count=3):
     urls = await fetch_google_search_results(f"{product} reviews", count, type="search")
-    
+    print("Website URLs: ", urls)
+
     web_loader = WebBaseLoader(urls)
     docs = web_loader.lazy_load()
     for doc in docs:
@@ -134,7 +137,7 @@ async def fetch_website_reviews(product, count=3):
 
 async def fetch_youtube_reviews(product, count=3):
     youtube_urls = await fetch_google_search_results(f"{product} review youtube", count, type="videos")
-
+    print("Youtube URLs: ", youtube_urls)
     transcript_docs = await process_urls(youtube_urls, product)
     
     return transcript_docs
@@ -158,6 +161,7 @@ async def add_product_reviews_to_collection(vector_store_from_client, product):
     all_docs = itertools.chain(website_reviews, youtube_reviews)
     split_docs = text_splitter.split_documents(all_docs)
     
+    print(f"Split {len(split_docs)} documents for {product}")
     uuids = [str(uuid4()) for _ in range(len(split_docs))]
     vector_store_from_client.add_documents(documents=split_docs, ids=uuids)
     
@@ -183,30 +187,42 @@ def build_response(query, vector_store_from_client: Chroma, candidates):
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     context = ""
     embeddings = OpenAIEmbeddings()
+    # may want to adjust query
     for candidate in candidates:
-        print(candidate)
         responses = vector_store_from_client.similarity_search_by_vector(
             embedding=embeddings.embed_query(candidate),
             k=3,
-            # filter={"product": candidate}
+            filter={"product": candidate}
         )
-        print("HI")
-        print (responses)
         context += "\n\n".join(
-            [f"Category: {result.metadata['category']}\nContent: {result.page_content}" for result in responses['documents']]
+            [f"Product: {result.metadata.get('product', 'N/A')}\nSource: {result.metadata.get('source', 'N/A')}\nContent: {result.page_content}" 
+            for result in responses]
         )
 
+
+    # May need to adjust this question
     question = f""""
         Reviews: {context}
         Based on the reviews, what are the top 5 {query} of 2024?
+        Format your answer exactly in a json format like this: 
+        {{"products": [{{"product-name":"p1_name", "product-rating":"p1_rating", "product-review":"p1_review","highlights":"p1_highlights","reviewers":"youtube_links"}},{{}}]}}
+
+        Don't respond with anything else, just the json format. 
+        Order it by best product first, source the reviews, and provide a brief review of each product (product_review).
+        The highlights section are the key points that make the product stand out like cost or value or flexibility.
     """
     print(question)
 
-    # model = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model="gpt-4o-mini")
-    # parser = StrOutputParser()
-    # chain = model | parser
-    # response = chain.invoke(question)
-    # print(response)
+    model = ChatOpenAI(openai_api_key=OPENAI_API_KEY, model="gpt-4o-mini")
+    parser = StrOutputParser()
+    chain = model | parser
+    response = chain.invoke(question)
+    clean_response = response.strip('```json').strip('```').strip()
+    print(clean_response)
+    json_res = json.loads(clean_response)
+    # can add images... just gonna use youtube thumbnails for now
+    # json_res['image'] = []
+    return json_res
 
 async def parse(query):
     load_dotenv(override=True)
@@ -216,4 +232,4 @@ async def parse(query):
     print("Candidates: ", candidates)
     tasks = [add_product_reviews_to_collection(vector_store_from_client, candidate) for candidate in candidates]
     await asyncio.gather(*tasks)
-    return candidates
+    return build_response(query, vector_store_from_client, candidates)
