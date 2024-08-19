@@ -3,10 +3,9 @@
 OneStopShop is a comprehensive platform that simplifies product research by gathering information from multiple sources. With OneStopShop, the website automatically:
 
 - **Access YouTube Reviews**: See video reviews for your products.
-- **Read Online Reviews**: Aggregate reviews from various online sources.
-- **Ask AI**: Get insights and answers from our AI-powered assistant.
+- **Reads Online Reviews**: Aggregate reviews from various online sources.
 
-And Based on this information, it gives you the top 5 Products!
+Based on these reviews, it uses RAG to determine the top 5 products and gives it to the user along with the sources. 
 
 ## Architecture
 
