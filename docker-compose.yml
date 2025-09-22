@@ -11,6 +11,10 @@ services:
       FLASK_ENV: development
       PYTHONUNBUFFERED: 1
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+      SERPER_API_KEY: ${SERPER_API_KEY}
+      USER_AGENT: ${USER_AGENT}
+    depends_on:
+      - chroma
     networks:
       - net
   web:
@@ -25,18 +29,20 @@ services:
       - net
   chroma:
     image: ghcr.io/chroma-core/chroma:latest
-    # volumes:
-    #   - index_data:/chroma/.chroma/index
+    volumes:
+      - index_data:/chroma/chroma
+    environment:
+      - IS_PERSISTENT=TRUE
+      - PERSIST_DIRECTORY=/chroma/chroma
+      - ANONYMIZED_TELEMETRY=FALSE
     ports:
       - 8000:8000
     networks:
       - net
 
-# volumes:
-#   index_data:
-#     driver: local
-#   backups:
-#     driver: local
+volumes:
+  index_data:
+    driver: local
 
 networks:
   net:

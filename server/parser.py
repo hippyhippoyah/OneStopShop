@@ -8,6 +8,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_community.document_loaders import BraveSearchLoader
 from langchain.schema import Document
 import os
+import time
 import chromadb
 from chromadb.config import Settings
 import requests
@@ -23,19 +24,40 @@ import itertools
 import datetime
 import aiohttp
 
+import time
+
 vector_store_from_client = None
 
 def setup_chroma_client():
-    chroma_client = chromadb.HttpClient(host="chroma", port = 8000, settings=Settings(allow_reset=True, anonymized_telemetry=False))
-    # chroma_client.delete_collection(name="sample_collection")
-    collection_status = False
-    while collection_status != True:
+    print("Setting up ChromaDB client...")
+    
+    # Configure client without authentication
+    chroma_client = chromadb.HttpClient(
+        host="chroma", 
+        port=8000,
+        settings=Settings(
+            anonymized_telemetry=False,
+            allow_reset=True
+        )
+    )
+    
+    # Create collection explicitly
+    try:
+        # First try to delete existing collection if it exists
         try:
-            document_collection = chroma_client.get_or_create_collection(name="sample_collection")
-            collection_status = True
-        except Exception as e:
-            pass
-    print("Collection created")
+            chroma_client.delete_collection(name="sample_collection")
+            print("Deleted existing collection")
+        except:
+            pass  # Collection doesn't exist, which is fine
+        
+        # Create new collection
+        document_collection = chroma_client.create_collection(name="sample_collection")
+        print("Collection created successfully")
+    except Exception as e:
+        print(f"Collection creation failed: {e}")
+        # If creation fails, try get_or_create as fallback
+        document_collection = chroma_client.get_or_create_collection(name="sample_collection")
+        print("Collection retrieved/created as fallback")
 
     embeddings = OpenAIEmbeddings()
     vector_store_from_client = Chroma(
@@ -43,8 +65,9 @@ def setup_chroma_client():
         collection_name="sample_collection",
         embedding_function=embeddings,
     )
-    vector_store_from_client.reset_collection()
-    print("Collection reset")
+    
+    print("Vector store setup complete")
+    return vector_store_from_client
     return vector_store_from_client
 
 async def fetch_google_search_results(google_query, count=3, type="search"):

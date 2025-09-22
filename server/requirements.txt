@@ -1,4 +1,4 @@
-FLASK
+Flask[async]
 beautifulsoup4
 langchain_community
 langchain_openai
