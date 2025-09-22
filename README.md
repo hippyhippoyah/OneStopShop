@@ -1,4 +1,4 @@
-# OneStopShop: WIP... I don't write much next.js
+# OneStopShop
 
 OneStopShop is a comprehensive platform that simplifies product research by gathering information from multiple sources. With OneStopShop, the website automatically:
 
@@ -6,7 +6,7 @@ OneStopShop is a comprehensive platform that simplifies product research by gath
 - **Read Online Reviews**: Aggregate reviews from various online sources.
 - **Ask AI**: Get insights and answers from our AI-powered assistant.
 
-And Based on this information, it gives you the top 5 Products!
+Analyzes content to determine the Top 5 Buys
 
 ## Architecture
 
@@ -27,7 +27,7 @@ The system is composed of the following components:
 Follow these steps to set up and run OneStopShop:
 
 1. **Create Environment Variables**:
-   - In the `/server` directory, create a `.env` file.
+   - In the main directory, create a `.env` file.
    - Add the following variables with your respective API keys:
      ```env
      OPENAI_API_KEY=<your_openai_api_key>
@@ -40,7 +40,7 @@ Follow these steps to set up and run OneStopShop:
    - Open a terminal and navigate to the root directory of the project.
    - Execute the following command to build and start all containers:
      ```bash
-     docker-compose up --build
+     docker compose up --build
      ```
 
 ## Important Files
